@@ -28,6 +28,12 @@ public class List {
     private static final String VIEW_NAME = "lists";
     private static final String DOC_TYPE = "list";
 
+    private static String getCurrentTimeString() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Calendar calendar = GregorianCalendar.getInstance();
+        return dateFormatter.format(calendar.getTime());
+    }
+
     public static Query getQuery(Database database) {
         com.couchbase.lite.View view = database.getView(VIEW_NAME);
         if (view.getMap() == null) {
@@ -48,17 +54,16 @@ public class List {
 
     public static Document createNewList(Database database, String title, String userId)
             throws CouchbaseLiteException {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Calendar calendar = GregorianCalendar.getInstance();
-        String currentTimeString = dateFormatter.format(calendar.getTime());
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("type", "list");
         properties.put("title", title);
-        properties.put("created_at", currentTimeString);
+        properties.put("created_at", getCurrentTimeString());
         properties.put("members", new ArrayList<String>());
-        if (userId != null)
+        
+        if (userId != null) {
             properties.put("owner", "profile:" + userId);
+        }
 
         Document document = database.createDocument();
         document.putProperties(properties);
