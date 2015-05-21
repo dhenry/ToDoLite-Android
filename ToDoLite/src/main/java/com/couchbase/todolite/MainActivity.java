@@ -204,16 +204,17 @@ public class MainActivity extends BaseActivity implements ListsAdapter.OnItemCli
     }
 
     void setupTodoLists() {
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
         liveQuery = List.getQuery(application.getDatabase()).toLiveQuery();
 
-        ListsAdapter mAdapter = new ListsAdapter(this, liveQuery);
-        mAdapter.setOnItemClickListener(this);
+        ListsAdapter listsAdapter = new ListsAdapter(this, liveQuery);
+        listsAdapter.setOnItemClickListener(this);
 
-        mRecyclerView.setAdapter(mAdapter);
+        RecyclerView viewLists = (RecyclerView) findViewById(R.id.view_lists);
+        viewLists.setHasFixedSize(true);
+        viewLists.setAdapter(listsAdapter);
+
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        viewLists.setLayoutManager(mLayoutManager);
     }
 
     void setupDrawer() {

@@ -25,7 +25,7 @@ public class ListsAdapter extends LiveQueryRecyclerAdapter<ListsAdapter.ViewHold
 
     @Override
     public ListsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        final View view = LayoutInflater.from(this.context).inflate(R.layout.recycler_view_item_row, viewGroup, false);
+        final View view = LayoutInflater.from(this.context).inflate(R.layout.view_list, viewGroup, false);
         ViewHolder holder = new ViewHolder(view, i);
 
         return holder;
