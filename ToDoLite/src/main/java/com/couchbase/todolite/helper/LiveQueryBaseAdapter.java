@@ -10,19 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
-import com.couchbase.lite.util.Log;
-import com.couchbase.todolite.Application;
 
-public class LiveQueryAdapter extends BaseAdapter {
+public class LiveQueryBaseAdapter extends BaseAdapter {
     private LiveQuery query;
     private QueryEnumerator enumerator;
     private Context context;
 
-    public LiveQueryAdapter(Context context, LiveQuery query) {
+    public LiveQueryBaseAdapter(Context context, LiveQuery query) {
         this.context = context;
         this.query = query;
 
@@ -30,7 +27,7 @@ public class LiveQueryAdapter extends BaseAdapter {
             @Override
             public void changed(final LiveQuery.ChangeEvent event) {
                 //TODO: Revise
-                ((Activity) LiveQueryAdapter.this.context).runOnUiThread(new Runnable() {
+                ((Activity) LiveQueryBaseAdapter.this.context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         enumerator = event.getRows();
@@ -75,7 +72,7 @@ public class LiveQueryAdapter extends BaseAdapter {
      */
     public void updateQueryToShowConflictingRevisions(final Database.ChangeEvent event) {
 
-        ((Activity) LiveQueryAdapter.this.context).runOnUiThread(new Runnable() {
+        ((Activity) LiveQueryBaseAdapter.this.context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 query.stop();

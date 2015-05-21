@@ -23,11 +23,11 @@ import com.couchbase.todolite.ImageViewActivity;
 import com.couchbase.todolite.R;
 import com.couchbase.todolite.document.Task;
 import com.couchbase.todolite.helper.ImageHelper;
-import com.couchbase.todolite.helper.LiveQueryAdapter;
+import com.couchbase.todolite.helper.LiveQueryBaseAdapter;
 
 import java.io.ByteArrayOutputStream;
 
-class TasksAdapter extends LiveQueryAdapter {
+class TasksAdapter extends LiveQueryBaseAdapter {
 
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_CHOOSE_PHOTO = 2;

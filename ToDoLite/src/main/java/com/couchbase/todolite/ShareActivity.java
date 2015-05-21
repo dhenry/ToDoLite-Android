@@ -1,6 +1,5 @@
 package com.couchbase.todolite;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,14 +13,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.couchbase.lite.CouchbaseLiteException;
-import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Query;
 import com.couchbase.lite.util.Log;
 import com.couchbase.todolite.document.List;
 import com.couchbase.todolite.document.Profile;
-import com.couchbase.todolite.helper.LiveQueryAdapter;
+import com.couchbase.todolite.helper.LiveQueryBaseAdapter;
 import com.couchbase.todolite.preferences.ToDoLitePreferences;
 
 public class ShareActivity extends BaseActivity {
@@ -85,7 +83,7 @@ public class ShareActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    private class UserAdapter extends LiveQueryAdapter {
+    private class UserAdapter extends LiveQueryBaseAdapter {
         public UserAdapter(Context context, LiveQuery query) {
             super(context, query);
         }
