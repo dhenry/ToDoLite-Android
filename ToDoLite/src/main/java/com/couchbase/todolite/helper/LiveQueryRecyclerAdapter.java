@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
-import com.couchbase.todolite.ListAdapter;
 
 public class LiveQueryRecyclerAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter {
 

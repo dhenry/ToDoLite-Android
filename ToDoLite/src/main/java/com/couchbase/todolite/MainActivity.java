@@ -28,6 +28,7 @@ import com.couchbase.lite.util.Log;
 import com.couchbase.todolite.document.List;
 import com.couchbase.todolite.document.Profile;
 import com.couchbase.todolite.preferences.ToDoLitePreferences;
+import com.couchbase.todolite.ui.lists.ListsAdapter;
 import com.couchbase.todolite.ui.tasks.TasksFragment;
 import com.facebook.Session;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -39,7 +40,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends BaseActivity implements ListAdapter.OnItemClickListener {
+public class MainActivity extends BaseActivity implements ListsAdapter.OnItemClickListener {
 
     private static final String TAG = Application.TAG;
     private CharSequence mTitle;
@@ -207,7 +208,7 @@ public class MainActivity extends BaseActivity implements ListAdapter.OnItemClic
         mRecyclerView.setHasFixedSize(true);
         liveQuery = List.getQuery(application.getDatabase()).toLiveQuery();
 
-        ListAdapter mAdapter = new ListAdapter(this, liveQuery);
+        ListsAdapter mAdapter = new ListsAdapter(this, liveQuery);
         mAdapter.setOnItemClickListener(this);
 
         mRecyclerView.setAdapter(mAdapter);

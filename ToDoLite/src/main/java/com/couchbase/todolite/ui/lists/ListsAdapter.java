@@ -1,7 +1,6 @@
-package com.couchbase.todolite;
+package com.couchbase.todolite.ui.lists;
 
 import android.content.Context;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,22 +9,22 @@ import android.widget.TextView;
 
 import com.couchbase.lite.Document;
 import com.couchbase.lite.LiveQuery;
-import com.couchbase.lite.QueryEnumerator;
+import com.couchbase.todolite.R;
 import com.couchbase.todolite.helper.LiveQueryRecyclerAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ListAdapter extends LiveQueryRecyclerAdapter<ListAdapter.ViewHolder> implements View.OnClickListener {
+public class ListsAdapter extends LiveQueryRecyclerAdapter<ListsAdapter.ViewHolder> implements View.OnClickListener {
 
     private OnItemClickListener onItemClickListener;
 
-    public ListAdapter(Context context, LiveQuery liveQuery) {
+    public ListsAdapter(Context context, LiveQuery liveQuery) {
         super(context, liveQuery);
     }
 
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ListsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         final View view = LayoutInflater.from(this.context).inflate(R.layout.recycler_view_item_row, viewGroup, false);
         ViewHolder holder = new ViewHolder(view, i);
 
@@ -34,7 +33,7 @@ public class ListAdapter extends LiveQueryRecyclerAdapter<ListAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        ListAdapter.ViewHolder listViewHolder = (ListAdapter.ViewHolder) viewHolder;
+        ListsAdapter.ViewHolder listViewHolder = (ListsAdapter.ViewHolder) viewHolder;
         final Document task = (Document) getItem(position);
         listViewHolder.textView.setText((String) task.getProperty("title"));
         listViewHolder.textView.setOnClickListener(this);
