@@ -86,16 +86,21 @@ public class MainActivity extends BaseActivity implements ListAdapter.OnItemClic
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Query query = List.queryListsInDatabase(application.getDatabase());
-        try {
-            QueryEnumerator queryEnumerator = query.run();
-            for (QueryRow queryRow : queryEnumerator) {
-                Document doc = queryRow.getDocument();
-                Log.d(Application.TAG, (String) doc.getProperty("title"));
-            }
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
+        liveQuery = List.queryListsInDatabase(application.getDatabase()).toLiveQuery();
+        ListAdapter listAdapter = new ListAdapter(this, liveQuery);
+        listAdapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(listAdapter);
+
+//        Query query = List.queryListsInDatabase(application.getDatabase());
+//        try {
+//            QueryEnumerator queryEnumerator = query.run();
+//            for (QueryRow queryRow : queryEnumerator) {
+//                Document doc = queryRow.getDocument();
+//                Log.d(Application.TAG, (String) doc.getProperty("title"));
+//            }
+//        } catch (CouchbaseLiteException e) {
+//            e.printStackTrace();
+//        }
     }
 
     void setupDrawer() {
