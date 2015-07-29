@@ -80,6 +80,44 @@ public class Application extends android.app.Application {
         };
     }
 
+    public void setupReplication(){
+        URL syncURL = null;
+        try {
+            syncURL = new URL(SYNC_URL);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        pullReplication = database.createPullReplication(syncURL);
+        pushReplication = database.createPullReplication(syncURL);
+
+        pullReplication.setContinuous(true);
+        pushReplication.setContinuous(true);
+
+        pullReplication.start();
+        pushReplication.start();
+    }
+
+    public void setupReplicationWithName(String name, String password) {
+        URL syncURL = null;
+        try {
+            syncURL = new URL(SYNC_URL);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        Authenticator authenticator = new BasicAuthenticator(name, password);
+        pullReplication = database.createPullReplication(syncURL);
+        pushReplication = database.createPushReplication(syncURL);
+
+        pullReplication.setAuthenticator(authenticator);
+        pushReplication.setAuthenticator(authenticator);
+
+        pullReplication.setContinuous(true);
+        pushReplication.setContinuous(true);
+
+        pullReplication.start();
+        pushReplication.start();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -95,6 +133,8 @@ public class Application extends android.app.Application {
         } catch (CouchbaseLiteException e) {
             Log.d(Application.TAG, "conflict, user already exist.");
         }
+
+        setupReplicationWithName("dave", "letmein");
     }
 
     public Database getDatabase() {

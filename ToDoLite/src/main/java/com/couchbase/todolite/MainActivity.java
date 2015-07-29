@@ -81,24 +81,6 @@ public class MainActivity extends BaseActivity implements ListAdapter.OnItemClic
             displayListContent(currentListId);
         }
 
-        startReplications();
-    }
-
-    void startReplications() {
-        try {
-            URL url = new URL("http://todolite-syncgateway.cluster.com");
-            Replication pullReplication = application.getDatabase().createPullReplication(url);
-            Replication pushReplication = application.getDatabase().createPushReplication(url);
-
-            pullReplication.setContinuous(true);
-            pushReplication.setContinuous(true);
-
-            pullReplication.start();
-            pushReplication.start();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
     }
 
     void setupTodoLists() {
