@@ -23,10 +23,13 @@ import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Query;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.replicator.Replication;
 import com.couchbase.lite.util.Log;
 import com.couchbase.todolite.document.List;
 import com.couchbase.todolite.preferences.ToDoLitePreferences;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 
 public class MainActivity extends BaseActivity implements ListAdapter.OnItemClickListener {
@@ -78,6 +81,24 @@ public class MainActivity extends BaseActivity implements ListAdapter.OnItemClic
             displayListContent(currentListId);
         }
 
+        startReplications();
+    }
+
+    void startReplications() {
+        try {
+            URL url = new URL("http://todolite-syncgateway.cluster.com");
+            Replication pullReplication = application.getDatabase().createPullReplication(url);
+            Replication pushReplication = application.getDatabase().createPushReplication(url);
+
+            pullReplication.setContinuous(true);
+            pushReplication.setContinuous(true);
+
+            pullReplication.start();
+            pushReplication.start();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     void setupTodoLists() {
