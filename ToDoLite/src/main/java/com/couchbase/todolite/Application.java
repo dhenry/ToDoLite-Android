@@ -6,6 +6,7 @@ package com.couchbase.todolite;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
+import com.couchbase.lite.Document;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.auth.Authenticator;
@@ -35,7 +36,25 @@ public class Application extends android.app.Application {
     private ToDoLitePreferences preferences;
 
     private void initDatabase() {
-        //TODO WORKSHOP STEP 1: initialize the database
+        try {
+            Manager.enableLogging(TAG, Log.VERBOSE);
+            Manager.enableLogging(Log.TAG, Log.VERBOSE);
+            Manager.enableLogging(Log.TAG_SYNC_ASYNC_TASK, Log.VERBOSE);
+            Manager.enableLogging(Log.TAG_SYNC, Log.VERBOSE);
+            Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
+            Manager.enableLogging(Log.TAG_VIEW, Log.VERBOSE);
+            Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
+
+            manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot init Manager object", e);
+        }
+
+        try {
+            database = manager.getDatabase(DATABASE_NAME);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Cannot get Database", e);
+        }
     }
 
     private Replication.ChangeListener getReplicationChangeListener() {
@@ -68,10 +87,11 @@ public class Application extends android.app.Application {
 
         Log.d(Application.TAG, "Application State: onCreate()");
         initDatabase();
-        preferences.setCurrentUserId("oliver");
+        preferences.setCurrentUserId("dave");
 
         try {
-            Profile.createProfile(database, "oliver", "Oliver Smith");
+            Document doc = Profile.createProfile(database, "dave", "David Henry");
+            Log.d(TAG, "profile created:" + doc.getProperties());
         } catch (CouchbaseLiteException e) {
             Log.d(Application.TAG, "conflict, user already exist.");
         }
