@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,6 +85,17 @@ public class MainActivity extends BaseActivity implements ListAdapter.OnItemClic
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
+
+        Query query = List.queryListsInDatabase(application.getDatabase());
+        try {
+            QueryEnumerator queryEnumerator = query.run();
+            for (QueryRow queryRow : queryEnumerator) {
+                Document doc = queryRow.getDocument();
+                Log.d(Application.TAG, (String) doc.getProperty("title"));
+            }
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+        }
     }
 
     void setupDrawer() {
