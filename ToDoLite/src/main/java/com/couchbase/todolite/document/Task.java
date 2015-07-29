@@ -12,7 +12,9 @@ import com.couchbase.lite.Document;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.Mapper;
 import com.couchbase.lite.Query;
+import com.couchbase.lite.Revision;
 import com.couchbase.lite.UnsavedRevision;
+import com.couchbase.lite.support.Base64;
 import com.couchbase.lite.util.Log;
 import com.couchbase.todolite.Application;
 
@@ -58,10 +60,41 @@ public class Task {
         return query;
     }
 
-    public static void createTask(Database database, String title, Bitmap image, String listId) {
+    public static Document createTask(Database database, String title, Bitmap image, String listId) throws CouchbaseLiteException {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Calendar calendar = GregorianCalendar.getInstance();
         String currentTimeString = dateFormatter.format(calendar.getTime());
+
+        Map<String, Object> properties = new HashMap<>();
+
+        properties.put("type", DOC_TYPE);
+        properties.put("title", title);
+        properties.put("checked", false);
+        properties.put("created_at", currentTimeString);
+        properties.put("list_id", listId);
+
+        Document document = database.createDocument();
+
+        UnsavedRevision revision = document.createRevision();
+        revision.setUserProperties(properties);
+
+        if (null != image) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 50, out);
+            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+            revision.setAttachment("image", "image/jpg", in);
+        }
+
+        try {
+            revision.save();
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+            Log.e(Application.TAG, "Cannot create the revision", e);
+        }
+
+        Log.d(Application.TAG, "Created doc %s", document.getId());
+
+        return document;
     }
 
     public static void updateCheckedStatus(Document task, boolean checked)
