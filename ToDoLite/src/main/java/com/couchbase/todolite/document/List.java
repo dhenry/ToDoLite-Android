@@ -14,6 +14,7 @@ import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.util.Log;
 import com.couchbase.todolite.Application;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,7 +45,19 @@ public class List {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Calendar calendar = GregorianCalendar.getInstance();
         String currentTimeString = dateFormatter.format(calendar.getTime());
-        return null;
+
+        Map<String, Object> properties = new HashMap<>();
+
+        properties.put("type", "list");
+        properties.put("title", title);
+        properties.put("createdAt", currentTimeString);
+        properties.put("members", new ArrayList<>());
+        properties.put("owner", userId);
+
+        Document document = database.createDocument();
+        document.putProperties(properties);
+
+        return document;
     }
 
     public static void assignOwnerToListsIfNeeded(Database database, Document user)
