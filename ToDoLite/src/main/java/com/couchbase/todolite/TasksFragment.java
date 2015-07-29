@@ -204,7 +204,11 @@ public class TasksFragment extends Fragment {
                         (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     String inputText = text.getText().toString();
                     if (inputText.length() > 0) {
-                        Task.createTask(getDatabase(), inputText, mImageToBeAttached, listId);
+                        try {
+                            Task.createTask(getDatabase(), inputText, mImageToBeAttached, listId);
+                        } catch (CouchbaseLiteException e) {
+                            Log.e(Application.TAG, "Couldn't create Task object");
+                        }
                     }
 
                     // Reset text and current selected photo if available.
